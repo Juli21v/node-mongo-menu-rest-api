@@ -1,10 +1,30 @@
-###
-POST http://localhost:9000/api/products HTTP/1.1
+### Health
+GET http://localhost:9000/api/health
+
+### Listar productos
+GET http://localhost:9000/api/products
+
+### Crear producto
+POST http://localhost:9000/api/products
 Content-Type: application/json
 
 {
-    "nombre":"Gelatina de cereza",
-    "Descripcion":"Delicioso postre, de gelatina sabor cereza, glaseado como cobertura y decorado con una cereza en su parte superior.",
-    "Precio":15000,
-    "Categoria_videojuego":"Splatoon"
+    "nombre": "Gelatina de cereza",
+    "Descripcion": "Postre con cobertura y cereza.",
+    "Precio": 15000,
+    "Categoria_videojuego": "Splatoon"
 }
+
+### Obtener por id (reemplaza ID)
+GET http://localhost:9000/api/products/REPLACE_OBJECT_ID
+
+### Actualizar
+PUT http://localhost:9000/api/products/REPLACE_OBJECT_ID
+Content-Type: application/json
+
+{
+    "Precio": 16000
+}
+
+### Borrar
+DELETE http://localhost:9000/api/products/REPLACE_OBJECT_ID

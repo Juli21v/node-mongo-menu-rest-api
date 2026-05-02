@@ -12,10 +12,23 @@ API REST ligera para gestionar **productos** de un restaurante o menú, con **Ex
 - dotenv, CORS
 - nodemon (desarrollo)
 
+## API (`/api`)
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/health` | Estado del servicio |
+| GET | `/api/products` | Lista productos |
+| GET | `/api/products/:id` | Detalle por `_id` de MongoDB |
+| POST | `/api/products` | Crear (`nombre` requerido) |
+| PUT | `/api/products/:id` | Actualizar |
+| DELETE | `/api/products/:id` | Eliminar |
+
+Ejemplos en `request.http`.
+
 ## Estructura del repositorio
 
 ```
-Restaurante/
+backend-menu-restaurante-mongodb/
 ├── src/
 │   ├── index.js           # Arranque del servidor
 │   ├── db.js              # Conexión MongoDB

@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-const productSchema = mongoose.Schema({
-  nombre: String,
+const productSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
   Descripcion: String,
-  Precio: Number,
-  Categoria_videojuego:String
-})
+  Precio: { type: Number, min: 0 },
+  Categoria_videojuego: String,
+});
 
 const product = mongoose.model("Productos", productSchema);
 

@@ -1,44 +1,77 @@
-import express from 'express';
-import productm from "../models/product.js";
-
+import express from "express";
+import mongoose from "mongoose";
+import Product from "../models/product.js";
 
 const router = express.Router();
 
-//Search user
-router.get('/products',(req, res) => {
-    res.json(product);
-})
-
-//create user
-router.post("/products",(req,res)=>{
-    const product = productm(req.body);
-    product.save()
-    .then((data)=>res.json(data))
-    .catch((error)=>res.json({message:error}));
+router.get("/products", async (req, res) => {
+  try {
+    const items = await Product.find().sort({ _id: -1 });
+    res.json(items);
+  } catch (e) {
+    res.status(500).json({ message: String(e.message) });
+  }
 });
 
-//Search by ID
-router.get('products/:id',(req, res) => {
-    const productID = parseInt(req.params.id);
-    const product = productos.find((p) => p.id === productId);
-
-    if(product){
-        res.json(product);
-    }else{
-        res.status(404).json({mensaje: 'Producto no encontrado'});
+router.get("/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID inválido" });
     }
+    const item = await Product.findById(id);
+    if (!item) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    res.json(item);
+  } catch (e) {
+    res.status(500).json({ message: String(e.message) });
+  }
 });
 
-//Put 
-router.put('/products/:id',(req, res) => {
-    const productId = parseInt(req.params.id);
-    const productoActualizado = req.body;
+router.post("/products", async (req, res) => {
+  try {
+    const doc = new Product(req.body);
+    const saved = await doc.save();
+    res.status(201).json(saved);
+  } catch (e) {
+    res.status(400).json({ message: String(e.message) });
+  }
+});
 
-    productos = productos.map((p) =>
-     p.id === productId ? productoActualizado : p
-    );
-    res.json(productoActualizado);
-})
+router.put("/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+    const item = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!item) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    res.json(item);
+  } catch (e) {
+    res.status(400).json({ message: String(e.message) });
+  }
+});
 
+router.delete("/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "ID inválido" });
+    }
+    const deleted = await Product.findByIdAndDelete(id);
+    if (!deleted) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+    res.json({ deleted: true, id });
+  } catch (e) {
+    res.status(500).json({ message: String(e.message) });
+  }
+});
 
 export default router;
